@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FireElementalEnemy : BaseEnemy
+public class EnemyFireElemental : BaseEnemy
 {
 	[Header("Fire Elemental Parameters")]
 	[SerializeField] private float _projectileAttackCooldown = 2f;
@@ -9,6 +9,7 @@ public class FireElementalEnemy : BaseEnemy
 
 	[SerializeField] private GameObject _fireProjectilePrefab;
 	[SerializeField] private float _fireProjectileSpeed = 5f;
+	[SerializeField] private int _fireProjectileDamage = 10;
 
 	private Transform _currentTarget;
 	private float _timeSinceLastProjectileAttack;
@@ -52,7 +53,7 @@ public class FireElementalEnemy : BaseEnemy
 			}
 			else
 			{
-				Explode();
+				Die();
 			}
 		}
 	}
@@ -64,6 +65,9 @@ public class FireElementalEnemy : BaseEnemy
 
 		Vector2 direction = (_currentTarget.position - transform.position).normalized;
 		rb.velocity = direction * _fireProjectileSpeed;
+
+		EnemyFireProjectile enemyFireProjectile = fireProjectile.GetComponent<EnemyFireProjectile>();
+		enemyFireProjectile.Initialize(_fireProjectileDamage);
 	}
 
 	private void Explode()
@@ -80,8 +84,6 @@ public class FireElementalEnemy : BaseEnemy
 				}
 			}
 		}
-
-		IsAlive = false;
 	}
 
 	private void OnDrawGizmos()

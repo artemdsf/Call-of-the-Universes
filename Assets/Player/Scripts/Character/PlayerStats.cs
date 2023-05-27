@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
 	public string Name { get; set; }
+	public int MaxHealth { get; private set; }
 	public int Health { get; private set; }
 	public int Mana { get; private set; }
 	public int Strength { get; private set; }
@@ -21,10 +22,17 @@ public class PlayerStats : MonoBehaviour
 		Agility = PlayerConstants.InitialAgility;
 		Stamina = PlayerConstants.InitialStamina;
 		Luck = PlayerConstants.InitialLuck;
+
+		MaxHealth = Health;
 	}
 
 	public void TakeDamage(int damage)
 	{
 		Health -= damage;
+	}
+
+	public void Heal(int value)
+	{
+		Health = Health + value < MaxHealth ? Health + value : MaxHealth;
 	}
 }

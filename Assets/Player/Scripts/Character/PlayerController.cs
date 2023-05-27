@@ -1,16 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(ElementsController))]
+[RequireComponent(typeof(ElementsController), typeof(PlayerStats))]
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] private List<BaseAttack> _attacks;
 
+	private PlayerStats _playerStats;
 	private ElementsController _elementsController;
 	private HotkeysManager _hotkeysManager;
+	private bool _isAlive = true;
 
 	private void Awake()
 	{
+		_playerStats = GetComponent<PlayerStats>();
 		_elementsController = GetComponent<ElementsController>();
 	}
 
@@ -27,6 +31,11 @@ public class PlayerController : MonoBehaviour
 			targetPosition.z = transform.position.z;
 			ExecuteCurrentAttack(targetPosition);
 		}
+
+		if (_playerStats.Health <= 0 && _isAlive)
+		{
+			Death();
+		}
 	}
 
 	private void ExecuteCurrentAttack(Vector3 targetPosition)
@@ -39,5 +48,12 @@ public class PlayerController : MonoBehaviour
 				break;
 			}
 		}
+	}
+
+	private void Death()
+	{
+		_isAlive = false;
+
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 }
